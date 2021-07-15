@@ -1,0 +1,18 @@
+/*
+    steps to create a User:
+    -------------------------------
+        1- @override the method userDetailsService and make it a @Bean
+            UserDetailsService is used to retrieve users from database
+        2- create the required user inside as shown of type UserDetails
+        3- return new InMemoryUserDetailsManager(user1,user2,......userN);
+            as it is the class of interest that implement USerDetailsService interface.
+            ----> if you try now run project you get Exception of "There is no PasswordEncoder mapped for the id "null" ??????????!!!!
+            ----> next is how to solve this
+        4- create class PasswordConfig to add password Encryptor act like @Configuration
+        5- make @Bean method that return the required PasswordEncoder
+        6- return the required encoder "BCryptPasswordEncoder"
+        7- inject passwordEncoder in our class "ApplicationSecurityConfig" and make it @Autowired
+        8- make a constructor for it.
+
+*/
+

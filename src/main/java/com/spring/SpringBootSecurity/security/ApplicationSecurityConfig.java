@@ -53,7 +53,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
             ----> next is how to solve this
         4- create class PasswordConfig to add password Encryptor act like @Configuration
         5- make @Bean method that return the required PasswordEncoder
-        6- return the required encoder
+        6- return the required encoder "BCryptPasswordEncoder"
         7- inject passwordEncoder in our class "ApplicationSecurityConfig" and make it @Autowired
         8- make a constructor for it.
 
@@ -65,10 +65,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails ahmedUser = User.builder()
                 .username("ahmed")
                 .password(passwordEncoder.encode("password"))
-                .roles("Student")
+                .roles(ApplicationUserRole.STUDENT.name())
+                .build();
+
+        UserDetails khaledUser = User.builder()
+                .username("khaled")
+                .password(passwordEncoder.encode("password123"))
+                .roles(ApplicationUserRole.ADMIN.name())
                 .build();
         return new InMemoryUserDetailsManager(
-                ahmedUser
+                ahmedUser,
+                khaledUser
         );
     }
 
