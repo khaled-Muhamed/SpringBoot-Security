@@ -29,13 +29,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http
+                .csrf().disable()
                 //authorize all the requests received
                 .authorizeRequests()
                 //we can specify some requests to be ignored from authentication
                 //this is called white listing some requests
                 .antMatchers("/","index","css/*","js/*")
                 .permitAll()
-                //nect line I will allow only students to access any path start with "api"
+                //next line I will allow only students to access any path start with "api"
                 .antMatchers("/api/**").hasRole(STUDENT.name())
                 //any Request received
                 .anyRequest()
@@ -66,20 +67,28 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     protected UserDetailsService userDetailsService(){
-        UserDetails ahmedUser = User.builder()
-                .username("ahmed")
+        UserDetails studentUser = User.builder()
+                .username("student")
                 .password(passwordEncoder.encode("password"))
                 .roles(STUDENT.name())
                 .build();
 
-        UserDetails khaledUser = User.builder()
-                .username("khaled")
+        UserDetails adminUser = User.builder()
+                .username("admin")
                 .password(passwordEncoder.encode("password123"))
                 .roles(ADMIN.name())
                 .build();
+
+        UserDetails adminTraineeUser = User.builder()
+                .username("adminTrainee")
+                .password(passwordEncoder.encode("password123"))
+                .roles(ADMINTRAINEE.name())
+                .build();
+
         return new InMemoryUserDetailsManager(
-                ahmedUser,
-                khaledUser
+                studentUser,
+                adminUser,
+                adminTraineeUser
         );
     }
 

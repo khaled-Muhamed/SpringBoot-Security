@@ -11,6 +11,10 @@ public enum ApplicationUserRole {
         add(COURSE_WRITE);
         add(STUDENT_READ);
         add(STUDENT_WRITE);
+    }}),
+    ADMINTRAINEE(new HashSet<ApplicationUserPermission>(){{
+        add(COURSE_READ);
+        add(STUDENT_READ);
     }});
 
     private final Set<ApplicationUserPermission> permissions;
