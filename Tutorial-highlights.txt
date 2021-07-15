@@ -14,5 +14,20 @@
         7- inject passwordEncoder in our class "ApplicationSecurityConfig" and make it @Autowired
         8- make a constructor for it.
 
-*/
+
+    Authentication using User Roles:
+    -------------------------------
+    
+    1- create ENUM Permissions with required roles (ADMIN , STUDENT)
+    2- create ENUM Roles with each role assigned it's Permissions
+    3- assign the role to the User while it's creation.
+    4- limit the api to the required user in  :
+        .antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
+    
+    
+    
+    
+    
+    
+    */
 

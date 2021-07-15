@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import static com.spring.SpringBootSecurity.security.ApplicationUserRole.*;
+
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -34,7 +36,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/","index","css/*","js/*")
                 .permitAll()
                 //nect line I will allow only students to access any path start with "api"
-                .antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
+                .antMatchers("/api/**").hasRole(STUDENT.name())
                 //any Request received
                 .anyRequest()
                 //must be authenticated
@@ -67,13 +69,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails ahmedUser = User.builder()
                 .username("ahmed")
                 .password(passwordEncoder.encode("password"))
-                .roles(ApplicationUserRole.STUDENT.name())
+                .roles(STUDENT.name())
                 .build();
 
         UserDetails khaledUser = User.builder()
                 .username("khaled")
                 .password(passwordEncoder.encode("password123"))
-                .roles(ApplicationUserRole.ADMIN.name())
+                .roles(ADMIN.name())
                 .build();
         return new InMemoryUserDetailsManager(
                 ahmedUser,
