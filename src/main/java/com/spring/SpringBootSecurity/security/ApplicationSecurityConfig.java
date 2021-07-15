@@ -33,6 +33,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //this is called white listing some requests
                 .antMatchers("/","index","css/*","js/*")
                 .permitAll()
+                //nect line I will allow only students to access any path start with "api"
+                .antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
                 //any Request received
                 .anyRequest()
                 //must be authenticated
