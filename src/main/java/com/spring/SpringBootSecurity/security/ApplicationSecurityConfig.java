@@ -3,6 +3,7 @@ package com.spring.SpringBootSecurity.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,7 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import static com.spring.SpringBootSecurity.security.ApplicationUserPermission.*;
 import static com.spring.SpringBootSecurity.security.ApplicationUserRole.*;
+import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @EnableWebSecurity
@@ -36,6 +40,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //this is called white listing some requests
                 .antMatchers("/","index","css/*","js/*")
                 .permitAll()
+                //next i am going to implement permission authentication
+                .antMatchers(DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(GET,"/management/api/**").hasAuthority(STUDENT_READ.getPermission())
                 //next line I will allow only students to access any path start with "api"
                 .antMatchers("/api/**").hasRole(STUDENT.name())
                 //any Request received
@@ -70,19 +79,23 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails studentUser = User.builder()
                 .username("student")
                 .password(passwordEncoder.encode("password"))
-                .roles(STUDENT.name())
+//                .roles(STUDENT.name())  //ROLE_STUDENT
+
+                .authorities(STUDENT.getGrantedAuthorirties())
                 .build();
 
         UserDetails adminUser = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("password123"))
-                .roles(ADMIN.name())
+//                .roles(ADMIN.name())  //ROLE_ADMIN
+                .authorities(ADMIN.getGrantedAuthorirties())
                 .build();
 
         UserDetails adminTraineeUser = User.builder()
                 .username("adminTrainee")
                 .password(passwordEncoder.encode("password123"))
-                .roles(ADMINTRAINEE.name())
+//                .roles(ADMINTRAINEE.name()) //ROLE_ADMINTRAINEE
+                .authorities(ADMINTRAINEE.getGrantedAuthorirties())
                 .build();
 
         return new InMemoryUserDetailsManager(

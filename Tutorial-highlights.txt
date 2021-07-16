@@ -25,7 +25,37 @@
         .antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
     
     
-    
+      Authentication using User Perimissions:
+      -------------------------------
+
+      1- add antMachers as follow :
+ //               .antMatchers(HttpMethod.DELETE,"/management/api/v1").hasAuthority(COURSE_WRITE.name())
+ //               .antMatchers(HttpMethod.POST,"/management/api/v1").hasAuthority(COURSE_WRITE.name())
+ //              .antMatchers(HttpMethod.PUT,"/management/api/v1").hasAuthority(COURSE_WRITE.name())
+
+      2- lw bseet fe .roles() w ent btcreate el user htla2i en elmethod de
+      btbuild List<GrantedAuthorities> w btzwd fla5r ROLE_RoleName
+      f e7na 3izen el list de ykon feha el permissions
+      f hnb3ml implement l helper method esmha getGrantedAuthorities lko user :
+                public Set<SimpleGrantedAuthority> getGrantedAuthorirties(){
+                    //this method is used to build set<SimpleGrantedAuthority> for each Role
+
+                    //1-build the required set
+                    Set<SimpleGrantedAuthority> authorities =
+                            permissions.stream()
+                            .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+                            .collect(Collectors.toSet());
+                    //2-Add ROLE_ + role Name
+                    authorities.add(new SimpleGrantedAuthority("ROLE_"+this.name()));
+                    //return authorities
+
+                    //kda ent k2nk 3mlt .roles() bta3t el USER bnfsk
+                    return authorities;
+                }
+
+      3- replace .roles() with .authorities(ROLENAME.getGrantedAuthorities())
+        wbkda kol user m3ah el authorities bta3to w n2dr ntcheck fe .antMatchers
+
     
     
     

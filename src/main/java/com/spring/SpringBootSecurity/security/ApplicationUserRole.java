@@ -1,6 +1,9 @@
 package com.spring.SpringBootSecurity.security;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.spring.SpringBootSecurity.security.ApplicationUserPermission.*;
 
@@ -25,5 +28,21 @@ public enum ApplicationUserRole {
 
     public Set<ApplicationUserPermission> getPermissions() {
         return permissions;
+    }
+
+    public Set<SimpleGrantedAuthority> getGrantedAuthorirties(){
+        //this method is used to build set<SimpleGrantedAuthority> for each Role
+
+        //1-build the required set
+        Set<SimpleGrantedAuthority> authorities =
+                permissions.stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+                .collect(Collectors.toSet());
+        //2-Add ROLE_ + role Name
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+this.name()));
+        //return authorities
+
+        //kda ent k2nk 3mlt .roles() bta3t el USER bnfsk
+        return authorities;
     }
 }
