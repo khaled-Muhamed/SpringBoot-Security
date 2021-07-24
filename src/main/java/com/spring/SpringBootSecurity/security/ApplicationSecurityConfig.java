@@ -13,6 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.spring.SpringBootSecurity.security.ApplicationUserPermission.*;
 import static com.spring.SpringBootSecurity.security.ApplicationUserRole.*;
@@ -56,7 +60,28 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //and
                 .and()
                 //has the authentication type to be Basic
-                .httpBasic();
+ //               .httpBasic();
+                //next we are going to add form based authentication
+                .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                    .defaultSuccessUrl("/courses")
+                    .passwordParameter("password")
+                    .usernameParameter("username")
+                .and()
+                .rememberMe()
+                        .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+                        .key("typeHereAVerySecureKe")
+                        .rememberMeParameter("remember-me")
+                .and()
+                //next we add logout credentials
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout","GET"))
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID","remember-me")
+                    .logoutSuccessUrl("/login");
 }
     /*
     steps to create a User:

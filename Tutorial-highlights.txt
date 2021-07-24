@@ -61,3 +61,29 @@
     
     */
 
+Section 6 :Form Based Authentication:
+-----------------------------
+1- change httpBasic() into formLogin()  --done
+2- now sessionId can be found in inspect-->Application-->cookies
+3- .loginPage("/login")
+4- now you need to add thymeleaf dependency and templates/login.html in resources folder
+5- you need to make a controller to direct you to your login page.
+   ----------> hna ent nseet el5twa bt3t permitAll() eli hia step 6
+6- you will need to permitAll for login page
+7- copy the html of actual login page of spring boot and paste it in your own login page
+8- ou need to make a default link after login success using defaultSuccessUrl("url here",true)
+9-add remember me in config and checkbox in html file
+10- check for it in  inspect-->Network-->login file request
+11- to add your period for token validity
+    .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))
+    .key("somethingverysecure");
+12- apply logout to configuration to be a GET request bec we disabled CSRF
+    .logoutUrl("/logout")
+    .logoutRequestMatcher(new AntPathMatcher("/logout","GET"))
+    .clearAuthentication(true)
+    .invalidateHttpSession(true)
+    .deleteCookies("JSESSIONID","remember-me")
+    .logoutSuccessUrl("/login");
+13- create a logout button
+14- change names for username and password and remember-me in form
+--------------------------------------------------------------------------------
